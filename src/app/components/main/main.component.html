@@ -2,56 +2,77 @@
   <h1 class="text-xl font-bold mb-6 text-gray-700">Excel to SQL Conversion</h1>
 
   <!-- File Upload Section -->
-  <div class="bg-gray-100 border border-dashed border-gray-300 rounded-md p-10 flex flex-col items-center justify-center mb-6">
-    <div class="bg-blue-100 rounded-full p-3 mb-4">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="17 8 12 3 7 8"></polyline>
-        <line x1="12" y1="3" x2="12" y2="15"></line>
-      </svg>
+  <div class="bg-gray-100 border border-dashed border-gray-300 rounded-md p-10 flex flex-col items-center justify-center mb-6" *ngIf="uploadedFiles.length === 0">
+    <div class="flex flex-col items-center">
+      <div class="bg-blue-100 rounded-full p-3 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+      </div>
+      <p class="text-gray-600 mb-4">Drag and drop files here, or click to browse</p>
+      <input
+        type="file"
+        id="fileInput"
+        accept=".xlsx,.xls"
+        class="hidden"
+        multiple
+        (change)="handleFileUpload($event)">
+      <button
+        class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+        onclick="document.getElementById('fileInput').click()">
+        Browse Files
+      </button>
     </div>
-    <p class="text-gray-600 mb-4">Drag and drop files here, or click to browse</p>
-    <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
-      Browse Files
-    </button>
   </div>
 
-<!--  <div class="bg-gray-100 border border-dashed border-gray-300 rounded-md p-4 mb-6">-->
-<!--      <div class="grid grid-cols-4 gap-4">-->
-<!--        &lt;!&ndash; File 1 &ndash;&gt;-->
-<!--        <div class="flex items-center justify-between py-2 px-4 bg-white rounded-md">-->
-<!--          <div class="flex items-center">-->
-<!--            <svg class="w-5 h-5 text-blue-500 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
-<!--              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>-->
-<!--              <polyline points="14 2 14 8 20 8"></polyline>-->
-<!--            </svg>-->
-<!--            <div>-->
-<!--              <p class="text-sm font-medium text-gray-800">file1.csv</p>-->
-<!--              <p class="text-xs text-gray-500">2.5 KB</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <button class="text-gray-400 hover:text-gray-600">-->
-<!--            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
-<!--              <line x1="18" y1="6" x2="6" y2="18"></line>-->
-<!--              <line x1="6" y1="6" x2="18" y2="18"></line>-->
-<!--            </svg>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
+  <!-- Files Display Section -->
+  <div class="bg-gray-100 border border-dashed border-gray-300 rounded-md p-4 mb-6" *ngIf="uploadedFiles.length > 0">
+    <div class="grid grid-cols-4 gap-4">
+      <div *ngFor="let file of uploadedFiles"
+           class="flex items-center justify-between py-2 px-4 bg-white rounded-md">
+        <div class="flex items-center">
+          <svg class="w-5 h-5 text-blue-500 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <div>
+            <p class="text-sm font-medium text-gray-800">{{ file.name }}</p>
+            <p class="text-xs text-gray-500">{{ file.size }}</p>
+          </div>
+        </div>
+        <button class="text-gray-400 hover:text-gray-600" (click)="removeFile(file.id)">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
 
-<!--    &lt;!&ndash; Add more files button &ndash;&gt;-->
-<!--    <div class="m-2 flex justify-end">-->
-<!--      <button class="flex items-center text-blue-500 hover:text-blue-700">-->
-<!--        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
-<!--          <circle cx="12" cy="12" r="10"></circle>-->
-<!--          <line x1="12" y1="8" x2="12" y2="16"></line>-->
-<!--          <line x1="8" y1="12" x2="16" y2="12"></line>-->
-<!--        </svg>-->
-<!--        <span>Add more files</span>-->
-<!--      </button>-->
-<!--    </div>-->
-<!--  </div>-->
+    <!-- Add more files and Remove all buttons -->
+    <div class="mt-4 flex justify-end">
+      <input
+        type="file"
+        id="fileInput"
+        accept=".xlsx,.xls"
+        class="hidden"
+        multiple
+        (change)="handleFileUpload($event)">
+      <button class="flex items-center text-blue-500 hover:text-blue-700 mr-4" onclick="document.getElementById('fileInput').click()">
+        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="16"></line>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+        <span>Add more files</span>
+      </button>
 
+      <button (click)="removeAllFiles()" class="flex items-center bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-full">Remove All</button>
+
+    </div>
+  </div>
 
   <!-- File Requirements Section -->
   <div class="mb-8">
@@ -74,79 +95,79 @@
     </div>
   </div>
 
-  <!-- Toast Container -->
-  <div class="fixed top-20 right-4 z-50 w-96 space-y-4">
-    <!-- Success Toast -->
-    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">
-      <div class="w-2 bg-green-500"></div>
-      <div class="px-4 py-3 w-full relative">
-        <div class="flex items-center"> <!-- Changed from items-start to items-center -->
-          <div class="flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500" viewBox="0 0 20 20" fill="currentColor"> <!-- Changed from h-6 w-6 to h-8 w-8 -->
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <div class="ml-4"> <!-- Changed from ml-3 to ml-4 for better spacing with larger icon -->
-            <p class="text-sm font-medium text-gray-900">Conversion Successful</p>
-            <p class="mt-1 text-sm text-gray-600">Your files have been converted to SQL successfully.</p>
-          </div>
-          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"> <!-- Changed positioning to center vertically -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"> <!-- Changed from h-5 w-5 to h-6 w-6 -->
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+<!--  &lt;!&ndash; Toast Container &ndash;&gt;-->
+<!--  <div class="fixed top-20 right-4 z-50 w-96 space-y-4">-->
+<!--    &lt;!&ndash; Success Toast &ndash;&gt;-->
+<!--    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">-->
+<!--      <div class="w-2 bg-green-500"></div>-->
+<!--      <div class="px-4 py-3 w-full relative">-->
+<!--        <div class="flex items-center"> &lt;!&ndash; Changed from items-start to items-center &ndash;&gt;-->
+<!--          <div class="flex-shrink-0">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500" viewBox="0 0 20 20" fill="currentColor"> &lt;!&ndash; Changed from h-6 w-6 to h-8 w-8 &ndash;&gt;-->
+<!--              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--          <div class="ml-4"> &lt;!&ndash; Changed from ml-3 to ml-4 for better spacing with larger icon &ndash;&gt;-->
+<!--            <p class="text-sm font-medium text-gray-900">Conversion Successful</p>-->
+<!--            <p class="mt-1 text-sm text-gray-600">Your files have been converted to SQL successfully.</p>-->
+<!--          </div>-->
+<!--          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"> &lt;!&ndash; Changed positioning to center vertically &ndash;&gt;-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"> &lt;!&ndash; Changed from h-5 w-5 to h-6 w-6 &ndash;&gt;-->
+<!--              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>-->
+<!--            </svg>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <!-- Error Toast -->
-    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">
-      <div class="w-2 bg-red-500"></div>
-      <div class="px-4 py-3 w-full relative">
-        <div class="flex items-center">
-          <div class="flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-gray-900">Conversion Unsuccessful</p>
-            <p class="mt-1 text-sm text-gray-600">Your files have been convert to SQL unsuccessfully.</p>
-          </div>
-          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+<!--    &lt;!&ndash; Error Toast &ndash;&gt;-->
+<!--    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">-->
+<!--      <div class="w-2 bg-red-500"></div>-->
+<!--      <div class="px-4 py-3 w-full relative">-->
+<!--        <div class="flex items-center">-->
+<!--          <div class="flex-shrink-0">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" viewBox="0 0 20 20" fill="currentColor">-->
+<!--              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--          <div class="ml-4">-->
+<!--            <p class="text-sm font-medium text-gray-900">Conversion Unsuccessful</p>-->
+<!--            <p class="mt-1 text-sm text-gray-600">Your files have been convert to SQL unsuccessfully.</p>-->
+<!--          </div>-->
+<!--          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">-->
+<!--              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>-->
+<!--            </svg>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <!-- Warning Toast -->
-    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">
-      <div class="w-2 bg-yellow-500"></div>
-      <div class="px-4 py-3 w-full relative">
-        <div class="flex items-center">
-          <div class="flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-gray-900">Warning</p>
-            <p class="mt-1 text-sm text-gray-600">Please check your file format before proceeding with the conversion.</p>
-          </div>
-          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+<!--    &lt;!&ndash; Warning Toast &ndash;&gt;-->
+<!--    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">-->
+<!--      <div class="w-2 bg-yellow-500"></div>-->
+<!--      <div class="px-4 py-3 w-full relative">-->
+<!--        <div class="flex items-center">-->
+<!--          <div class="flex-shrink-0">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">-->
+<!--              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--          <div class="ml-4">-->
+<!--            <p class="text-sm font-medium text-gray-900">Warning</p>-->
+<!--            <p class="mt-1 text-sm text-gray-600">Please check your file format before proceeding with the conversion.</p>-->
+<!--          </div>-->
+<!--          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">-->
+<!--              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>-->
+<!--            </svg>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
 
-  </div>
+<!--  </div>-->
   <!-- Convert Button -->
   <div class="flex justify-center">
     <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-6 rounded">
