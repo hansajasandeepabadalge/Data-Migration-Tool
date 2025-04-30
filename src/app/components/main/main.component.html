@@ -2,7 +2,20 @@
   <h1 class="text-xl font-bold mb-6 text-gray-700">Excel to SQL Conversion</h1>
 
   <!-- File Upload Section -->
-  <div class="bg-gray-100 border border-dashed border-gray-300 rounded-md p-10 flex flex-col items-center justify-center mb-6" *ngIf="uploadedFiles.length === 0">
+  <div
+    class="border border-dashed border-gray-300 rounded-md p-10 flex flex-col items-center justify-center mb-6"
+    *ngIf="uploadedFiles.length === 0"
+    [ngClass]="{
+    'bg-blue-100': isDragging,
+    'bg-gray-100': !isDragging,
+    'border-blue-500': isDragging,
+    'border-gray-300': !isDragging
+    }"
+    [class.border-blue-500]="isDragging"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
     <div class="flex flex-col items-center">
       <div class="bg-blue-100 rounded-full p-3 mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -28,7 +41,20 @@
   </div>
 
   <!-- Files Display Section -->
-  <div class="bg-gray-100 border border-dashed border-gray-300 rounded-md p-4 mb-6" *ngIf="uploadedFiles.length > 0">
+  <div
+    class="bg-gray-100 border border-dashed border-gray-300 rounded-md p-4 mb-6"
+    *ngIf="uploadedFiles.length > 0"
+    [ngClass]="{
+    'bg-blue-100': isDragging,
+    'bg-gray-100': !isDragging,
+    'border-blue-500': isDragging,
+    'border-gray-300': !isDragging
+    }"
+    [class.border-blue-500]="isDragging"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
     <div class="grid grid-cols-4 gap-4">
       <div *ngFor="let file of uploadedFiles"
            class="flex items-center justify-between py-2 px-4 bg-white rounded-md">
@@ -95,8 +121,9 @@
     </div>
   </div>
 
-<!--  &lt;!&ndash; Toast Container &ndash;&gt;-->
-<!--  <div class="fixed top-20 right-4 z-50 w-96 space-y-4">-->
+  <!-- Toast Container -->
+  <div class="fixed top-20 right-4 z-50 w-96 space-y-4">
+
 <!--    &lt;!&ndash; Success Toast &ndash;&gt;-->
 <!--    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">-->
 <!--      <div class="w-2 bg-green-500"></div>-->
@@ -167,10 +194,10 @@
 <!--    </div>-->
 
 
-<!--  </div>-->
+  </div>
   <!-- Convert Button -->
   <div class="flex justify-center">
-    <button (click)="convertExcelToCSV()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-6 rounded">
+    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-6 rounded">
       Convert Files
     </button>
   </div>
