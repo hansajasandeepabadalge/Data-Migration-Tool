@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
-import * as XLSX from 'xlsx';
+import {FileuploadService} from '../../services/fileupload.service';
 
 interface UploadedFile {
   id: number;
   name: string;
   size: string;
-  file: File;
+  file: File
 }
 
 @Component({
@@ -21,9 +21,10 @@ interface UploadedFile {
 })
 
 export class MainComponent {
-
   uploadedFiles: UploadedFile[] = [];
   isDragging = false;
+
+  constructor(private fileUploadService: FileuploadService) {}
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -53,8 +54,7 @@ export class MainComponent {
             size: `${sizeInKB} KB`,
             file: file
           };
-          this.uploadedFiles.push(fileInfo);
-        }
+          this.uploadedFiles.push(fileInfo);}
       });
     }
   }
@@ -74,6 +74,7 @@ export class MainComponent {
         }
         this.uploadedFiles.push(fileInfo);
       })
+      console.log(this.uploadedFiles);
     }
   }
 
@@ -83,5 +84,11 @@ export class MainComponent {
 
   removeAllFiles() {
     this.uploadedFiles = [];
+  }
+
+  convertBtn() {
+    this.uploadedFiles.forEach(file => {
+      this.fileUploadService.postData({ file: file.file, name: file.name }).subscribe();
+    });
   }
 }
