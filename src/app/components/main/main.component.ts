@@ -87,8 +87,15 @@ export class MainComponent {
   }
 
   convertBtn() {
-    this.uploadedFiles.forEach(file => {
-      this.fileUploadService.postData({ file: file.file, name: file.name }).subscribe();
+    const uploadTasks = this.uploadedFiles.map(file =>
+      ({
+        file: file.file,
+        name: file.name
+      })
+    );
+
+    this.fileUploadService.postData(uploadTasks).subscribe(() => {
+      console.log(`Uploaded all files successfully!`);
     });
   }
 }

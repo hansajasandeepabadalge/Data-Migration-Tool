@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileuploadService {
-
-  private apiurl = 'http://localhost:8080/api/files/uploadFiles';
+  private apiUrl: string = 'http://localhost:8080/api/files/uploadFiles';
 
   constructor(private http: HttpClient) {}
 
-  postData(fileData: { file: File, name: string }) {
+  postData(files: { file: File; name: string }[]): Observable<any> {
     const formData = new FormData();
-    formData.append('file', fileData.file, fileData.name);
+    files.forEach((fileData) => {
+      formData.append('files', fileData.file, fileData.name);
+    });
 
-    return this.http.post(this.apiurl, formData);
+    return this.http.post(this.apiUrl, formData);
   }
 }
