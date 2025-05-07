@@ -74,7 +74,6 @@ export class MainComponent {
         }
         this.uploadedFiles.push(fileInfo);
       })
-      console.log(this.uploadedFiles);
     }
   }
 
