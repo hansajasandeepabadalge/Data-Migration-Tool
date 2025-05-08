@@ -24,6 +24,7 @@ export class MainComponent {
   uploadedFiles: UploadedFile[] = [];
   isDragging = false;
 
+
   constructor(private fileUploadService: FileuploadService) {}
 
   onDragOver(event: DragEvent) {
@@ -85,16 +86,33 @@ export class MainComponent {
     this.uploadedFiles = [];
   }
 
-  convertBtn() {
-    const uploadTasks = this.uploadedFiles.map(file =>
-      ({
-        file: file.file,
-        name: file.name
-      })
-    );
 
-    this.fileUploadService.postData(uploadTasks).subscribe(() => {
-      console.log(`Uploaded all files successfully!`);
+  toastMessage: { success?: string; error?: string; warn?: string } = {};
+  isLoading: boolean = false;
+
+  convertBtn(): void {
+    if (!this.uploadedFiles || this.uploadedFiles.length === 0) {
+      this.toastMessage.error = 'No files selected for upload.';
+      return;
+    }
+
+    this.isLoading = true;
+    const uploadTasks = this.uploadedFiles.map(file => ({
+      file: file.file,
+      name: file.name
+    }));
+
+    this.fileUploadService.postData(uploadTasks).subscribe({
+      next: (response) => {
+        this.toastMessage.success = response.message;
+        this.uploadedFiles = []; // Clear files after successful upload
+      },
+      error: (error) => {
+        this.toastMessage.error = error.message || 'An error occurred during upload';
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
     });
   }
 }

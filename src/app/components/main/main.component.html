@@ -124,74 +124,75 @@
   <!-- Toast Container -->
   <div class="fixed top-20 right-4 z-50 w-96 space-y-4">
 
-<!--    &lt;!&ndash; Success Toast &ndash;&gt;-->
-<!--    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">-->
-<!--      <div class="w-2 bg-green-500"></div>-->
-<!--      <div class="px-4 py-3 w-full relative">-->
-<!--        <div class="flex items-center"> &lt;!&ndash; Changed from items-start to items-center &ndash;&gt;-->
-<!--          <div class="flex-shrink-0">-->
-<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500" viewBox="0 0 20 20" fill="currentColor"> &lt;!&ndash; Changed from h-6 w-6 to h-8 w-8 &ndash;&gt;-->
-<!--              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />-->
-<!--            </svg>-->
-<!--          </div>-->
-<!--          <div class="ml-4"> &lt;!&ndash; Changed from ml-3 to ml-4 for better spacing with larger icon &ndash;&gt;-->
-<!--            <p class="text-sm font-medium text-gray-900">Conversion Successful</p>-->
-<!--            <p class="mt-1 text-sm text-gray-600">Your files have been converted to SQL successfully.</p>-->
-<!--          </div>-->
-<!--          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"> &lt;!&ndash; Changed positioning to center vertically &ndash;&gt;-->
-<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"> &lt;!&ndash; Changed from h-5 w-5 to h-6 w-6 &ndash;&gt;-->
-<!--              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>-->
-<!--            </svg>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!-- Success Toast -->
+    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300" *ngIf="toastMessage.success !== undefined">
+      <div class="w-2 bg-green-500"></div>
+      <div class="px-4 py-3 w-full relative">
+        <div class="flex items-center"> <!-- Changed from items-start to items-center -->
+          <div class="flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500" viewBox="0 0 20 20" fill="currentColor"> <!-- Changed from h-6 w-6 to h-8 w-8 -->
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-4"> <!-- Changed from ml-3 to ml-4 for better spacing with larger icon -->
+            <p class="text-sm font-medium text-gray-900">Conversion Successful</p>
+            <p class="mt-1 text-sm text-gray-600">{{ toastMessage.success }}</p>
+          </div>
+          <button (click)="toastMessage.success = undefined" class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"> <!-- Changed positioning to center vertically -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"> <!-- Changed from h-5 w-5 to h-6 w-6 -->
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
 
-<!--    &lt;!&ndash; Error Toast &ndash;&gt;-->
-<!--    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">-->
-<!--      <div class="w-2 bg-red-500"></div>-->
-<!--      <div class="px-4 py-3 w-full relative">-->
-<!--        <div class="flex items-center">-->
-<!--          <div class="flex-shrink-0">-->
-<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" viewBox="0 0 20 20" fill="currentColor">-->
-<!--              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />-->
-<!--            </svg>-->
-<!--          </div>-->
-<!--          <div class="ml-4">-->
-<!--            <p class="text-sm font-medium text-gray-900">Conversion Unsuccessful</p>-->
-<!--            <p class="mt-1 text-sm text-gray-600">Your files have been convert to SQL unsuccessfully.</p>-->
-<!--          </div>-->
-<!--          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">-->
-<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">-->
-<!--              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>-->
-<!--            </svg>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!-- Error Toast -->
+    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300" *ngIf="toastMessage.error !== undefined">
+      <div class="w-2 bg-red-500"></div>
+      <div class="px-4 py-3 w-full relative">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-900">Conversion Unsuccessful</p>
+            <p class="mt-1 text-sm text-gray-600">{{ toastMessage.error }}</p>
+          </div>
+          <button (click)="toastMessage.error = undefined"
+                  class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
 
-<!--    &lt;!&ndash; Warning Toast &ndash;&gt;-->
-<!--    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300">-->
-<!--      <div class="w-2 bg-yellow-500"></div>-->
-<!--      <div class="px-4 py-3 w-full relative">-->
-<!--        <div class="flex items-center">-->
-<!--          <div class="flex-shrink-0">-->
-<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">-->
-<!--              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />-->
-<!--            </svg>-->
-<!--          </div>-->
-<!--          <div class="ml-4">-->
-<!--            <p class="text-sm font-medium text-gray-900">Warning</p>-->
-<!--            <p class="mt-1 text-sm text-gray-600">Please check your file format before proceeding with the conversion.</p>-->
-<!--          </div>-->
-<!--          <button class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">-->
-<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">-->
-<!--              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>-->
-<!--            </svg>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!-- Warning Toast -->
+    <div class="flex overflow-hidden bg-white rounded-lg shadow-lg transition-all duration-300" *ngIf="toastMessage.warn !== undefined">
+      <div class="w-2 bg-yellow-500"></div>
+      <div class="px-4 py-3 w-full relative">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-900">Warning</p>
+            <p class="mt-1 text-sm text-gray-600"> {{ toastMessage.warn }}</p>
+          </div>
+          <button (click)="toastMessage.warn = undefined" class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
 
 
   </div>
